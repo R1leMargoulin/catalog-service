@@ -1,0 +1,25 @@
+{
+  "name": "catalog-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "catalog.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/R1leMargoulin/catalog-service.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/R1leMargoulin/catalog-service/issues"
+  },
+  "homepage": "https://github.com/R1leMargoulin/catalog-service#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^6.8.2",
+    "nodemon": "^2.0.20"
+  }
+}
