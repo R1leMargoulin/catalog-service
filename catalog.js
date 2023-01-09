@@ -1,14 +1,24 @@
 const express = require('express');
 const app = express();
+const mongoose = require('mongoose')
 app.use(express.json());
 
-const mongoose = require('mongoose')
-mongoose.Promise = global.Promise;
+require('dotenv').config();
 
-const db = {}
-db.mongoose = mongoose
-db.sensor = require('./sensor.models');
-module.exports = db
+process.env.MONGO_HOST
+
+//connection
+const db = require('./models')
+db.mongoose.connect(`mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}`,{
+    useNewUrlParser: true,
+    useUnifiedTopology:true
+})
+.then(()=>{
+    console.log('connexion sucess')
+}).catch(err =>{
+    console.log('connexion error')
+    process.exit()
+})
 
 
 
@@ -51,35 +61,33 @@ app.get("/catalog/:idr/menus", (req,res)=>{
     //RESTO: CREATE READ UPDATE DELETE
 });
 
-app.get("/catalog/:idr/menus/:numa", (req,res)=>{
+app.get("/catalog/:idr/articles/:numa", (req,res)=>{
     var idr = req.params.id;
     var numa = req.params.id;
     //montrer un menu spécifique de la boutique id
     //CLIENT: READ ONLY
     //RESTO: CREATE READ UPDATE DELETE
 });
-app.post("/catalog/:idr/menus/:numa", (req,res)=>{
+app.post("/catalog/:idr/articles/:numa", (req,res)=>{
     var idr = req.params.id;
     var numa = req.params.id;
-
-
-
-    var newMenu = {
-        id:req.body.id,
+    var newItem = {
+        id:numa,
+        id_restaurant:idr,
+        picture:req.body.picture,
         type:req.body.type,
-        datas:req.body.datas,
-        metrics:req.body.metrics
+        price:req.body.price
     }
-    var sensor = sensors.find((sensor)=>{
-        return sensor.id == newSensor.id
+    var item = catalog-models.find((items)=>{
+        return item.id == newItem.id
     })
-    if(sensor){
+    if(item){
         res.status(409).json({message:"l'id est deja pris"})
     }
     else{
         //sensors.push(newSensor);
-        db.sensor.insertMany(newSensor)
-        res.status(200).json({message:`l'id ${newSensor.id} a bien été ajouté`})
+        db.sensor.insertMany(newItem)
+        res.status(200).json({message:`l'id ${newItem.id} a bien été ajouté`})
         console.log(sensors)
     }
 });
