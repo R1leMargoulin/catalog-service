@@ -80,4 +80,6 @@ const catalogs = mongoose.model(
 );
 
 
-module.exports = Sensor;
+module.exports = items;
+module.exports = menus;
+module.exports = catalogs;
