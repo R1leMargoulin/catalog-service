@@ -1,7 +1,7 @@
 const mongoose= require('mongoose');
 
-const catalogs = mongoose.model(
-    "catalogs",
+const items = mongoose.model(
+    "items",
     new mongoose.Schema({
         id:{
             type:Number,
@@ -11,16 +11,19 @@ const catalogs = mongoose.model(
             type:Number,
             required:true
         },
-        items:{
-            type:Object,
+        picture:{
+            type:String,
             required:true
         },
-        menus:{
-            type:Object,
+        type:{
+            type:String,
+            required:true
+        },
+        price:{
+            type:Number,
             required:true
         },
     })
 );
 
-
-module.exports = catalogs;
+module.exports = items;

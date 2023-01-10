@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const { items } = require('./models');
 app.use(express.json());
 
 require('dotenv').config();
@@ -8,7 +9,8 @@ require('dotenv').config();
 process.env.MONGO_HOST
 
 //connection
-const db = require('./models')
+const db = require('./models');
+const catalogs = require('./models/catalog.models');
 db.mongoose.connect(`mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}`,{
     useNewUrlParser: true,
     useUnifiedTopology:true
@@ -68,28 +70,28 @@ app.get("/catalog/:idr/articles/:numa", (req,res)=>{
     //CLIENT: READ ONLY
     //RESTO: CREATE READ UPDATE DELETE
 });
-app.post("/catalog/:idr/articles/:numa", (req,res)=>{
-    var idr = req.params.id;
-    var numa = req.params.id;
+app.post("/articles", (req,res)=>{
+    console.log(req.body)
     var newItem = {
-        id:numa,
-        id_restaurant:idr,
+        id:req.body.numa,
+        id_restaurant:req.body.idr,
         picture:req.body.picture,
         type:req.body.type,
         price:req.body.price
     }
-    var item = catalog-models.find((items)=>{
-        return item.id == newItem.id
+    db.items.find({id:newItem.id}).then((item)=>{
+        if(item.length!==0){
+            console.log(item)
+            res.status(409).json({message:"l'id est deja pris"})
+        }
+        else{
+            //sensors.push(newSensor);
+            db.items.insertMany(newItem)
+            res.status(200).json({message:`l'id ${newItem.id} a bien été ajouté`})
+            //console.log(items)
+        }
     })
-    if(item){
-        res.status(409).json({message:"l'id est deja pris"})
-    }
-    else{
-        //sensors.push(newSensor);
-        db.sensor.insertMany(newItem)
-        res.status(200).json({message:`l'id ${newItem.id} a bien été ajouté`})
-        console.log(sensors)
-    }
+    
 });
 
 
