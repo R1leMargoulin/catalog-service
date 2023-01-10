@@ -10,7 +10,7 @@ process.env.MONGO_HOST
 
 //connection
 const db = require('./models');
-const catalogs = require('./models/catalog.models');
+
 db.mongoose.connect(`mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}`,{
     useNewUrlParser: true,
     useUnifiedTopology:true
@@ -29,46 +29,85 @@ app.get("/ping", (req,res) =>{
     res.status(200).json({message:'pong'});
 });
 
-app.get("/catalogs", (req,res)=>{
+/*app.get("/catalogs", (req,res)=>{
     //montrer tous les catalogues
     //client: READ ONLY
     //resto: il a des boutons pour CRUD complet
-});
+});*/
 
 app.get("/catalog/:idr", (req,res)=>{
-    var id = req.params.id;
+    var idr = req.params.idr;
+    var menusList;
+    var itemsList;
+    db.menus.find({id_restaurant:idr}).then((menus)=>{
+        menusList = menus;
+        db.items.find({id_restaurant:idr}).then((e)=>{
+            itemsList = e
+            res.status(200).json({menusList , itemsList});
+            
+        }).catch(()=>{
+            res.status(404).json({message: 'sensor not found'});
+        })
+    }).catch(()=>{
+        res.status(404).json({message: 'sensor not found'});
+    })
+    
+    
+    
+
     //montrer le catalogue de la boutique id
     //CLIENT: READ ONLY
     //RESTO: CREATE READ UPDATE DELETE
 });
 
+
+
 app.get("/catalog/:idr/menus", (req,res)=>{
-    var id = req.params.id;
+    var idr = req.params.idr;
     //montrer les menus de la boutique id
     //CLIENT: READ ONLY
     //RESTO: CREATE READ UPDATE DELETE
+    db.menus.find({id_restaurant:idr}).then((e)=>{
+        res.status(200).json(e);
+    }).catch(()=>{
+        res.status(404).json({message: 'sensor not found'});
+    })
 });
 
-app.get("/catalog/:idr/menus/:numm", (req,res)=>{
-    var idr = req.params.id;
-    var numm = req.params.id;
+app.get("/catalog/:idr/menu/:numm", (req,res)=>{
+    var numm = req.params.numm;
+
+
+    db.menus.find({id:numm}).then((e)=>{
+            res.status(200).json(e);
+        }).catch(()=>{
+            res.status(404).json({message: 'sensor not found'});
+        })
+    
+
     //montrer un menu spécifique de la boutique id
     //CLIENT: READ ONLY
     //RESTO: CREATE READ UPDATE DELETE
 });
-app.get("/catalog/:idr/menus", (req,res)=>{
-    var idr = req.params.id;
+app.get("/catalog/:idr/articles", (req,res)=>{
+    var idr = req.params.idr;
     //montrer les menus de la boutique id
     //CLIENT: READ ONLY
     //RESTO: CREATE READ UPDATE DELETE
+    db.items.find({id_restaurant:idr}).then((e)=>{
+        res.status(200).json(e);
+    }).catch(()=>{
+        res.status(404).json({message: 'sensor not found'});
+    })
 });
 
-app.get("/catalog/:idr/articles/:numa", (req,res)=>{
-    var idr = req.params.id;
-    var numa = req.params.id;
-    //montrer un menu spécifique de la boutique id
-    //CLIENT: READ ONLY
-    //RESTO: CREATE READ UPDATE DELETE
+app.get("/catalog/:idr/article/:numa", (req,res)=>{
+    var numa = req.params.numa;
+    db.items.find({id:numa}).then((e)=>{
+            res.status(200).json(e);
+        }).catch(()=>{
+            res.status(404).json({message: 'sensor not found'});
+        })
 });
 app.post("/article", (req,res)=>{
     console.log(req.body)
