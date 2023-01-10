@@ -70,11 +70,12 @@ app.get("/catalog/:idr/articles/:numa", (req,res)=>{
     //CLIENT: READ ONLY
     //RESTO: CREATE READ UPDATE DELETE
 });
-app.post("/articles", (req,res)=>{
+app.post("/article", (req,res)=>{
     console.log(req.body)
     var newItem = {
         id:req.body.numa,
         id_restaurant:req.body.idr,
+        name: req.body.name,
         picture:req.body.picture,
         type:req.body.type,
         price:req.body.price
@@ -89,6 +90,30 @@ app.post("/articles", (req,res)=>{
             db.items.insertMany(newItem)
             res.status(200).json({message:`l'id ${newItem.id} a bien été ajouté`})
             //console.log(items)
+        }
+    })
+    
+});
+
+app.post("/menu", (req,res)=>{
+    console.log(req.body)
+    var newMenu = {
+        id: req.body.numm,
+        id_restaurant:req.body.idr,
+        picture:req.body.picture,
+        name: req.body.name,
+        price:req.body.price,
+        items:req.body.items
+    }
+    db.menus.find({id:newMenu.id}).then((menu)=>{
+        if(menu.length!==0){
+            console.log(menu)
+            res.status(409).json({message:"l'id est deja pris"})
+        }
+        else{
+            //sensors.push(newSensor);
+            db.menus.insertMany(newMenu)
+            res.status(200).json({message:`l'id ${newMenu.id} a bien été ajouté`})
         }
     })
     

@@ -11,6 +11,10 @@ const items = mongoose.model(
             type:Number,
             required:true
         },
+        name:{
+            type:String,
+            required:true
+        },
         picture:{
             type:String,
             required:true

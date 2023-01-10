@@ -10,11 +10,11 @@ const menus = mongoose.model(
             type:Number,
             required:true
         },
-        picture:{
-            type:Number,
+        name:{
+            type:String,
             required:true
         },
-        type:{
+        picture:{
             type:String,
             required:true
         },
