@@ -26,7 +26,7 @@ app.get("/:id_restorant/:num_article", (req,res)=>{
             res.status(404).json({message: 'sensor not found'});
         })
 });
-app.post("/", (req,res)=>{
+app.post("/add", (req,res)=>{
     console.log(req.body)
     var newItem = {
         id:req.body.numa,
