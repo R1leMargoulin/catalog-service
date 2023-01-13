@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const { items, menus } = require('./models');
+const cors = require('cors')
 
 
 
@@ -12,6 +13,7 @@ process.env.MONGO_HOST
 
 
 app.use(express.json());
+app.use(cors())
 app.use("/menus", routerMenus)
 app.use("/articles", routerItems)
 
