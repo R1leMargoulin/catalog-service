@@ -18,6 +18,7 @@ app.post("/add", (req,res)=>{
         id_restaurant:req.body.idr,
         picture:req.body.picture,
         name: req.body.name,
+        description: req.body.description,
         price:req.body.price,
         items:req.body.items
     }

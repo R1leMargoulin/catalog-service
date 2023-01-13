@@ -19,6 +19,10 @@ const items = mongoose.model(
             type:String,
             required:true
         },
+        description:{
+            type:String,
+            required:true
+        },
         type:{
             type:String,
             required:true
