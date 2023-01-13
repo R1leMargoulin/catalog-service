@@ -14,8 +14,8 @@ app.get("/ping", (req,res) =>{
 app.post("/add", (req,res)=>{
     console.log(req.body)
     var newMenu = {
-        id: req.body.numm,
-        id_restaurant:req.body.idr,
+        id: req.body.num_menu,
+        id_restaurant:req.body.id_restaurant,
         picture:req.body.picture,
         name: req.body.name,
         description: req.body.description,

@@ -29,8 +29,8 @@ app.get("/:id_restorant/:num_article", (req,res)=>{
 app.post("/add", (req,res)=>{
     console.log(req.body)
     var newItem = {
-        id:req.body.numa,
-        id_restaurant:req.body.idr,
+        id:req.body.num_article,
+        id_restaurant:req.body.id_restaurant,
         name: req.body.name,
         picture:req.body.picture,
         description: req.body.description,
