@@ -52,4 +52,34 @@ app.post("/add", (req,res)=>{
     
 });
 
+app.put("/modify", (req,res)=>{
+    console.log(req.body)
+    var newItem = {
+        id:req.body.num_article,
+        id_restaurant:req.body.id_restaurant,
+        name: req.body.name,
+        picture:req.body.picture,
+        description: req.body.description,
+        type:req.body.type,
+        price:req.body.price
+    }
+    db.items.findOneAndUpdate({id:newItem.id},{$set:newItem}).then(()=>{
+            res.status(200).json({message:"Objet modifié"})
+        
+    }).catch(e=>{
+            res.status(404).json({message:`objet non trouvé`})
+            //console.log(items)
+        })
+    
+});
+
+app.delete("/:id_restorant/:num_article", (req,res)=>{
+    var numa = req.params.num_article;
+    db.items.findOneAndDelete({id:numa}).then(()=>{
+            res.status(200).json({message:"item deleted"});
+        }).catch(()=>{
+            res.status(404).json({message: 'item not found'});
+        })
+});
+
 module.exports = app;

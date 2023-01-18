@@ -65,4 +65,33 @@ app.get("/:id_restaurant/:num_menu", (req,res)=>{
     //RESTO: CREATE READ UPDATE DELETE
 });
 
+app.put("/modify", (req,res)=>{
+    var newMenu = {
+        id: req.body.num_menu,
+        id_restaurant:req.body.id_restaurant,
+        picture:req.body.picture,
+        name: req.body.name,
+        description: req.body.description,
+        price:req.body.price,
+        items:req.body.items
+    }
+    db.menus.findOneAndUpdate({id:newMenu.id},{$set:newMenu}).then(()=>{
+            res.status(200).json({message:"Objet modifié"})
+        
+    }).catch(e=>{
+            res.status(404).json({message:`objet non trouvé`})
+            //console.log(items)
+        })
+    
+});
+
+app.delete("/:id_restorant/:num_menu", (req,res)=>{
+    var numm = req.params.num_menu;
+    db.menus.findOneAndDelete({id:numm}).then(()=>{
+            res.status(200).json({message:"item deleted"});
+        }).catch(()=>{
+            res.status(404).json({message: 'item not found'});
+        })
+});
+
 module.exports = app;
