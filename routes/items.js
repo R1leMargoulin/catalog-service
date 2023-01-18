@@ -29,7 +29,6 @@ app.get("/:id_restorant/:num_article", (req,res)=>{
 app.post("/add", (req,res)=>{
     console.log(req.body)
     var newItem = {
-        id:req.body.num_article,
         id_restaurant:req.body.id_restaurant,
         name: req.body.name,
         picture:req.body.picture,
@@ -37,25 +36,20 @@ app.post("/add", (req,res)=>{
         type:req.body.type,
         price:req.body.price
     }
-    db.items.find({id:newItem.id}).then((item)=>{
-        if(item.length!==0){
-            console.log(item)
-            res.status(409).json({message:"l'id est deja pris"})
-        }
-        else{
-            //sensors.push(newSensor);
-            db.items.insertMany(newItem)
-            res.status(200).json({message:`l'id ${newItem.id} a bien été ajouté`})
-            //console.log(items)
-        }
-    })
+        //sensors.push(newSensor);
+        db.items.insertMany(newItem).then(()=>{
+            res.status(200).json({message:`l'item a bien été ajouté`})
+        }).catch(e=>{
+            res.status(400).json({message:`error`})
+        })
+        //console.log(items)
     
 });
 
 app.put("/modify", (req,res)=>{
     console.log(req.body)
     var newItem = {
-        id:req.body.num_article,
+        _id:req.body._num_article,
         id_restaurant:req.body.id_restaurant,
         name: req.body.name,
         picture:req.body.picture,
@@ -63,7 +57,7 @@ app.put("/modify", (req,res)=>{
         type:req.body.type,
         price:req.body.price
     }
-    db.items.findOneAndUpdate({id:newItem.id},{$set:newItem}).then(()=>{
+    db.items.findOneAndUpdate({_id:newItem._id},{$set:newItem}).then(()=>{
             res.status(200).json({message:"Objet modifié"})
         
     }).catch(e=>{
