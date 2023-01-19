@@ -20,7 +20,7 @@ app.get("/:id_restorant", (req,res)=>{
 
 app.get("/:id_restorant/:num_article", (req,res)=>{
     var numa = req.params.num_article;
-    db.items.find({id:numa}).then((e)=>{
+    db.items.find({_id:numa}).then((e)=>{
             res.status(200).json(e);
         }).catch(()=>{
             res.status(404).json({message: 'sensor not found'});
@@ -69,7 +69,7 @@ app.put("/modify", (req,res)=>{
 
 app.delete("/:id_restorant/:num_article", (req,res)=>{
     var numa = req.params.num_article;
-    db.items.findOneAndDelete({id:numa}).then(()=>{
+    db.items.findOneAndDelete({_id:numa}).then(()=>{
             res.status(200).json({message:"item deleted"});
         }).catch(()=>{
             res.status(404).json({message: 'item not found'});

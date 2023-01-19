@@ -2,12 +2,8 @@ const mongoose= require('mongoose');
 const menus = mongoose.model(
     "menus",
     new mongoose.Schema({
-        id:{
-            type:Number,
-            required:true
-        },
         id_restaurant:{
-            type:Number,
+            type:String,
             required:true
         },
         name:{
@@ -19,6 +15,10 @@ const menus = mongoose.model(
             required:true
         },
         description:{
+            type:String,
+            required:true
+        },
+        type:{
             type:String,
             required:true
         },

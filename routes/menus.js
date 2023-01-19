@@ -14,24 +14,17 @@ app.get("/ping", (req,res) =>{
 app.post("/add", (req,res)=>{
     console.log(req.body)
     var newMenu = {
-        id: req.body.num_menu,
         id_restaurant:req.body.id_restaurant,
         picture:req.body.picture,
         name: req.body.name,
         description: req.body.description,
         price:req.body.price,
+        type:"menu",
         items:req.body.items
     }
-    db.menus.find({id:newMenu.id}).then((menu)=>{
-        if(menu.length!==0){
-            console.log(menu)
-            res.status(409).json({message:"l'id est deja pris"})
-        }
-        else{
-            //sensors.push(newSensor);
-            db.menus.insertMany(newMenu)
-            res.status(200).json({message:`l'id ${newMenu.id} a bien été ajouté`})
-        }
+    //sensors.push(newSensor);
+    db.menus.insertMany(newMenu).then(()=>{
+        res.status(200).json({message:`le menu a bien été ajouté`});
     })
     
 });
@@ -53,7 +46,7 @@ app.get("/:id_restaurant/:num_menu", (req,res)=>{
     var numm = req.params.num_menu;
 
 
-    db.menus.find({id:numm}).then((e)=>{
+    db.menus.find({_id:numm}).then((e)=>{
             res.status(200).json(e);
         }).catch(()=>{
             res.status(404).json({message: 'sensor not found'});
@@ -67,15 +60,16 @@ app.get("/:id_restaurant/:num_menu", (req,res)=>{
 
 app.put("/modify", (req,res)=>{
     var newMenu = {
-        id: req.body.num_menu,
+        _id: req.body._id,
         id_restaurant:req.body.id_restaurant,
         picture:req.body.picture,
         name: req.body.name,
         description: req.body.description,
         price:req.body.price,
+        type:req.body.type,
         items:req.body.items
     }
-    db.menus.findOneAndUpdate({id:newMenu.id},{$set:newMenu}).then(()=>{
+    db.menus.findOneAndUpdate({_id:newMenu._id},{$set:newMenu}).then(()=>{
             res.status(200).json({message:"Objet modifié"})
         
     }).catch(e=>{
@@ -87,7 +81,7 @@ app.put("/modify", (req,res)=>{
 
 app.delete("/:id_restorant/:num_menu", (req,res)=>{
     var numm = req.params.num_menu;
-    db.menus.findOneAndDelete({id:numm}).then(()=>{
+    db.menus.findOneAndDelete({_id:numm}).then(()=>{
             res.status(200).json({message:"item deleted"});
         }).catch(()=>{
             res.status(404).json({message: 'item not found'});
