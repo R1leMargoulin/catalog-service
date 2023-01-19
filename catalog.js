@@ -60,15 +60,28 @@ app.get("/catalog/:idr", (req,res)=>{
     }).catch(()=>{
         res.status(404).json({message: 'sensor not found'});
     })
-    
-    
-    
-
-    //montrer le catalogue de la boutique id
-    //CLIENT: READ ONLY
-    //RESTO: CREATE READ UPDATE DELETE
 });
 
+app.get("/catalog/find/:id", (req,res)=>{
+    var id = req.params.id;
+    db.menus.find({_id:id}).then((menu)=>{
+        if(menu.length==0){
+            db.items.find({_id:id}).then((item)=>{
+                if(item.length==0){
+                    res.status(404).json({message:"not found"})
+                }
+                else{
+                    res.status(200).json(item);
+                }
+            })
+        }
+        else{
+            res.status(200).json(menu);
+        }
+    }).catch(()=>{
+            res.status(404).json({message: 'not found'});
+    });
+});
 
 
 
