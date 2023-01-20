@@ -47,29 +47,42 @@ app.get("/catalog/:idr", (req, res) => {
   var idr = req.params.idr;
   var menusList;
   var itemsList;
+  db.menus.find({ id_restaurant: idr }).then((menus) => {
+    menusList = menus;
+    db.items
+      .find({ id_restaurant: idr })
+      .then((e) => {
+        itemsList = e;
+        res.status(200).json({ menusList, itemsList });
+      })
+      .catch(() => {
+        res.status(404).json({ message: "sensor not found" });
+      });
+  });
+});
+
+app.get("/catalog/find/:id", (req, res) => {
+  var id = req.params.id;
   db.menus
-    .find({ id_restaurant: idr })
-    .then((menus) => {
-      menusList = menus;
-      db.items
-        .find({ id_restaurant: idr })
-        .then((e) => {
-          itemsList = e;
-          res.status(200).json({ menusList, itemsList });
-        })
-        .catch(() => {
-          res.status(404).json({ message: "sensor not found" });
+    .find({ _id: id })
+    .then((menu) => {
+      if (menu.length == 0) {
+        db.items.find({ _id: id }).then((item) => {
+          if (item.length == 0) {
+            res.status(404).json({ message: "not found" });
+          } else {
+            res.status(200).json(item);
+          }
         });
+      } else {
+        res.status(200).json(menu);
+      }
     })
     .catch(() => {
-      res.status(404).json({ message: "sensor not found" });
+      res.status(404).json({ message: "not found" });
     });
-
-  //montrer le catalogue de la boutique id
-  //CLIENT: READ ONLY
-  //RESTO: CREATE READ UPDATE DELETE
 });
 
 app.listen(8000, () => {
-  console.log("server is running on port 3000.");
+  console.log("server is running on port 8000.");
 });
